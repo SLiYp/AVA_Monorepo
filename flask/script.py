@@ -107,7 +107,7 @@ def get_session_history_api(session_id):
         return jsonify({"error": f"No history found for session ID: {session_id}"}), 404
 
 if __name__ == '__main__':
-    app.run(debug=False,port=os.getenv("PORT"))
+    app.run(host="0.0.0.0",debug=False,port=os.getenv("PORT"))
 
 
 

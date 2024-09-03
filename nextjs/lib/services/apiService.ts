@@ -39,7 +39,7 @@ export const handleError = (err: any) => {
     return null;
 };
 
-// let data = JSON.stringify({
+// let data = JSON.stringify({ 
 //   "name": "John Doe",
 //   "email": "john@example.com",
 //   "password": "password123"
