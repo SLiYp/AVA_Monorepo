@@ -1,0 +1,17 @@
+# Node.js
+node_modules/
+.env
+
+# Next.js
+.next/
+out/
+
+# Flask
+__pycache__/
+
+# Docker
+*.log
+*.env
+
+#exclude config
+config/

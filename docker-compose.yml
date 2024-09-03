@@ -1,0 +1,40 @@
+services:
+  nodejs:
+    build: ./nodejs
+    container_name: ava-backend-server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ~/Desktop/AVA_Monorepo/config/nodejs.env:/app/.env
+    environment:
+      - NODE_ENV_FILE=/app/.env
+    networks:
+      - app-network
+
+  flask:
+    build: ./flask
+    container_name: ava-llm-server
+    ports:
+      - "3100:3100"
+    volumes:
+      - ~/Desktop/AVA_Monorepo/config/flask.env:/app/.env
+    environment:
+      - FLASK_ENV_FILE=/app/.env
+    networks:
+      - app-network
+
+  nextjs:
+    build: ./nextjs
+    container_name: ava-webapp-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ~/Desktop/AVA_Monorepo/config/nextjs.env:/app/.env
+    environment:
+      - NEXT_ENV_FILE=/app/.env
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
