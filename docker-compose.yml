@@ -34,7 +34,6 @@ services:
       - NEXT_ENV_FILE=/app/.env
     networks:
       - app-network
-
 networks:
   app-network:
     driver: bridge

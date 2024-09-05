@@ -21,7 +21,7 @@ exports.handleResponse = (res) => {
         }
         return data;
     } catch (error) {
-        console.log("handle response: ", error);
+        console.log("handle response: ", error.message);
     }
 };
 
