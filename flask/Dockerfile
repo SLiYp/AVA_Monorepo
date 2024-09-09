@@ -6,4 +6,4 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
 # Load the environment variables from the mounted .env file
-CMD ["gunicorn", "-w", "1", "-b", ":3100", "--timeout", "10000", "app:app"]
+CMD ["gunicorn", "-w", "1", "-b", ":6100", "--timeout", "10000", "app:app"]
