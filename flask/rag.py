@@ -14,6 +14,7 @@ from langchain_openai import OpenAIEmbeddings, OpenAI, ChatOpenAI
 import chromadb
 from text_to_chunks import load_text_from_file,chunk_pdf_text
 
+
 # Load environment variables
 load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
