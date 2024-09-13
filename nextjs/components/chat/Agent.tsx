@@ -10,7 +10,7 @@ interface AgentProps {
     onClick?: () => void;
 }
 
-const Agent = ({ chat_id,name,image, category, onClick }: AgentProps) => {
+const Agent = ({ chat_id, name, image, category, onClick }: AgentProps) => {
     const { session, setSession } = useSessionContext();
     const [datetime, setDatetime] = useState("");
     const [text, setText] = useState("");
@@ -60,18 +60,27 @@ const Agent = ({ chat_id,name,image, category, onClick }: AgentProps) => {
 
     return (
         <div
-            className={`flex items-center space-x-2 cursor-pointer -mx-4 hover:bg-gray-800 p-2 rounded-md ${
-                session == chat_id ? "bg-gray-800" : "bg-inherit"
+            className={`flex justify-start space-x-2 cursor-pointer hover:bg-[#9CBEBC] px-2 py-3 rounded-2xl ${
+                session == chat_id ? "bg-[#9CBEBC]" : "bg-inherit"
             }`}
             onClick={onClick}
         >
-            <div className={`w-8 h-8 rounded-full flex-shrink-0`} style={style}></div>
-            <div className="flex flex-col w-full overflow-hidden"> 
-                <div className="flex flex-row justify-between items-center">
-                    <span>{name}</span>
-                    <span className="font-thin text-xs text-[#5661F6]">{datetime}</span>
+            <div
+                className={`w-10 h-10 rounded-full flex-shrink-0 overflow-hidden bg-white`}
+                style={style}
+            ><img src={image} alt='Profile Pic' /></div>
+            <div className="flex flex-row w-full items-start overflow-hidden">
+                <div className="flex flex-col h-full w-[70%] lg:w-[75%] xl:w-[80%] overflow-hidden justify-center">
+                    <span className="text-black font-semibold text-md leading-none">
+                        {name}
+                    </span>
+                    <span className="text-xs text-[#2D3339] align-text-top text-clip overflow-hidden whitespace-nowrap leading-none">
+                        {text}
+                    </span>
                 </div>
-                <span className="font-thin text-xs text-[#CBCBCB] truncate">{text}</span>
+                <div className="justify-start flex-shrink-0 w-[30%] lg:w-[25%] xl:w-[20%] text-center">
+                    <span className="text-xs text-[#2D3339] align-top">{datetime}</span>
+                </div>
             </div>
         </div>
     );

@@ -11,12 +11,10 @@ export default function ChatLayout({
 }) {
     const [session, setSession] = useState<string | null>(null);
     return (
-        <div className="flex h-screen bg-[#242227] text-white">
+        <div className="flex h-screen bg-[#F7F4F0] text-white">
             <sessionContext.Provider value={{ session, setSession }}>
-                <Suspense fallback={<LoadingSpinner />}>
-                    <Sidebar />
-                    {children}
-                </Suspense>
+                <Sidebar />
+                {children}
             </sessionContext.Provider>
         </div>
     );

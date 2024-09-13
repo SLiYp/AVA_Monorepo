@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Send } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Mic, Send } from "lucide-react";
 import { Prompt } from "@/lib/interfaces";
-import { sessionContext } from "@/lib/context/AgentContext";
 import Bubble from "./chat/Bubble";
 import { chatComplition, getSession } from "@/lib/services/chatService";
 import PulsatingDots from "./chat/PulsatingDots";
+import { pjs } from "@/app/fonts";
 
 interface ChatComponentProps {
     sessionId: string;
@@ -14,9 +14,10 @@ interface ChatComponentProps {
 
 const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
     const [inputMessage, setInputMessage] = useState<string>("");
-
     const [prompts, setPrompts] = useState<Prompt[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+
+    const scrollableContentRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -31,6 +32,13 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
         fetchData();
     }, [sessionId]);
 
+    useEffect(() => {
+        if (scrollableContentRef.current) {
+            scrollableContentRef.current.scrollTop =
+                scrollableContentRef.current.scrollHeight;
+        }
+    }, [prompts]);
+
     const handleSendMessage = async () => {
         if (!inputMessage.trim()) return;
         setLoading(true);
@@ -41,7 +49,6 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
             responses: [],
         };
 
-        // Add the new prompt with the initial empty response
         setPrompts((prevPrompts) => [
             ...prevPrompts,
             { ...newPrompt, responses: [""] },
@@ -49,14 +56,12 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
         setInputMessage("");
 
         try {
-            // Call chatComplition and wait for the response
             const res = await chatComplition({
                 sessionId: sessionId,
                 id: newPrompt.promptId,
                 text: newPrompt.prompt,
             });
 
-            // Update the prompt with the actual response
             setPrompts((prevPrompts) =>
                 prevPrompts.map((prompt) =>
                     prompt.promptId === newPrompt.promptId
@@ -64,7 +69,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
                               ...prompt,
                               responses: [
                                   ...prompt.responses.slice(0, -1),
-                                  res, // Replace the empty string with the actual response
+                                  res ? res : "Server Error",
                               ],
                           }
                         : prompt
@@ -80,7 +85,11 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
 
     return (
         <div className="flex flex-col items-center justify-center flex-1">
-            <div className="flex-1 flex p-4 overflow-y-auto justify-center custom-scrollbar w-full">
+            <div className="h-[10%] text-black">Ok</div>
+            <div
+                className="flex-1 flex p-4 overflow-y-auto justify-center custom-scrollbar w-full"
+                ref={scrollableContentRef}
+            >
                 <div className="space-y-4 w-4/5">
                     {prompts.map((message, index) => (
                         <div key={index}>
@@ -102,11 +111,11 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
                 </div>
             </div>
             <div className="p-4 w-4/5 flex justify-center">
-                <div className="flex items-center bg-black rounded-full pl-4 py-1 pr-1 w-3/5">
+                <div className="flex items-center bg-[#B0CBC9] rounded-2xl px-4 py-2 w-full">
                     <input
                         type="text"
-                        placeholder="🧠What's in your mind..."
-                        className="flex-1 bg-transparent outline-none"
+                        placeholder="What's in your mind..."
+                        className={`flex-1 bg-transparent outline-none text-black placeholder:text-black placeholder:text-sm placeholder:italic ${pjs.className}`}
                         value={inputMessage}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             setInputMessage(e.target.value)
@@ -118,10 +127,15 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
                         }
                     />
                     <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        className={`w-8 h-8 mx-1 rounded-full flex items-center justify-center bg-[#F7F4F0] cursor-pointer`}
+                    >
+                        <Mic className="text-black w-4" />
+                    </div>
+                    <div
+                        className={`w-8 h-8 mx-1 rounded-full flex items-center justify-center ${
                             loading
                                 ? "bg-gray-600 cursor-not-allowed"
-                                : "bg-[#9747FF] cursor-pointer"
+                                : "bg-[#F7F4F0] cursor-pointer"
                         }`}
                         onClick={() => !loading && handleSendMessage()}
                     >

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -14,25 +14,31 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    chatSessions: [{
-        sessionId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'ChatSession',
-            required: true,
+    image: {
+        type: String,
+        required: true,
+    },
+    chatSessions: [
+        {
+            sessionId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "ChatSession",
+                required: true,
+            },
+            name: {
+                type: String,
+                required: true,
+            },
+            image: {
+                type: String,
+                required: true,
+            },
         },
-        name: {
-            type: String,
-            required: true,
-        },
-        image: {
-            type: String,
-            required: true,
-        }
-    }],
+    ],
     createdAt: {
         type: Date,
         default: Date.now,
-    }
+    },
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);
