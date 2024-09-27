@@ -9,7 +9,7 @@ export default function ChatPage() {
             <div
                 className={`w-[90%] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${pjs.className}`}
             >
-                <h1 className="text-4xl font-semibold text-black">
+                <h1 className="text-4xl font-semibold text-black dark:text-white">
                     Hey ! {user?.name}
                 </h1>
                 <p className="text-gray-500 text-4xl font-semibold">

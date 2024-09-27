@@ -18,8 +18,8 @@ const MiniAgent = ({ chat_id, image, onClick }: MiniAgentProps) => {
     return (
         <div className="flex items-center justify-center">
             <div
-                className={`cursor-pointer hover:bg-[#9CBEBC] p-2 rounded-full ${
-                    session == chat_id ? "bg-[#9CBEBC]" : "bg-inherit"
+                className={`cursor-pointer hover:bg-[#9CBEBC] dark:hover:bg-[#9747FF] p-2 rounded-full ${
+                    session == chat_id ? "bg-[#9CBEBC] dark:bg-[#9747FF]" : "bg-inherit"
                 }`}
                 onClick={onClick}
             >

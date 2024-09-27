@@ -17,7 +17,7 @@ export const About = () => {
   return (
     <section className="about-us-section flex min-h-[80vh] justify-center" id="about">
       <motion.div
-        className="about mt-40 flex h-auto max-w-5xl flex-col items-center justify-items-start gap-10 md:flex-row"
+        className="about mt-40 flex h-auto max-w-5xl flex-row items-center justify-items-start gap-10 md:flex-row"
         ref={ref}
         style={{ scale: scaleProgress, opacity: scaleProgress }}
       >

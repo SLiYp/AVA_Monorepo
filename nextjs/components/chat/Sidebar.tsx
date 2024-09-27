@@ -19,6 +19,7 @@ import { useUser } from "@/lib/context/userContext";
 import MiniAgent from "./MiniAgent";
 import SidebarIcon from "../icons/SidebarIcon";
 import { pjs, urbanist } from "@/app/fonts";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 interface Agent {
     chatSessionId: string;
@@ -32,7 +33,7 @@ const Sidebar = () => {
     const [agents, setAgents] = useState<Agent[]>([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [signOutVisible, setSignOutVisible] = useState(false);
-    const [min, setMin] = useState<Boolean>(false);
+    const [min, setMin] = useState<boolean>(false);
     const [modalOpen, setModalOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const signOutRef = useRef<HTMLDivElement>(null);
@@ -137,10 +138,10 @@ const Sidebar = () => {
     return (
         <div
             className={`relative ${
-                min ? "w-24" : "w-1/5 min-w-48"
-            } bg-[#B0CBC9] px-4 py-8 flex flex-col justify-between rounded-r-xl ${
+                min ? "w-24" : "w-1/5 min-w-[13rem]"
+            } bg-[#B0CBC9] dark:bg-black px-4 py-8 flex flex-col justify-between rounded-r-xl ${
                 pjs.className
-            }`}
+            } transition-all duration-300 ease-in-out text-black dark:text-white`}
         >
             <div>
                 <div
@@ -172,7 +173,7 @@ const Sidebar = () => {
                     </div>
                 </div>
                 <h2
-                    className={`text-lg font-semibold text-black mt-8 mb-2 ${
+                    className={`text-lg font-semibold mt-8 mb-2 ${
                         min ? "hidden" : null
                     }`}
                 >
@@ -219,7 +220,8 @@ const Sidebar = () => {
                     )}
                 </div>
             </div>
-            <div className="flex items-center justify-center">
+            <div className="flex flex-col gap-2 items-center justify-center">
+                <ThemeSwitcher mini={min} />
                 <div
                     className={`border-white border-2 rounded-full ${
                         min
@@ -232,7 +234,7 @@ const Sidebar = () => {
                         <img src={user?.image} alt="Profile Pic" />
                     </div>
                     <span
-                        className={`text-black ${min ? "hidden" : null} ${
+                        className={`${min ? "hidden" : null} ${
                             urbanist.className
                         }`}
                     >

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Mic, Send } from "lucide-react";
 import { Prompt } from "@/lib/interfaces";
 import Bubble from "./chat/Bubble";
 import { chatComplition, getSession } from "@/lib/services/chatService";
 import PulsatingDots from "./chat/PulsatingDots";
-import { pjs } from "@/app/fonts";
+import TextInput from "./chat/TextInput";
+import VoiceInput from "./chat/VoiceInput";
 
 interface ChatComponentProps {
     sessionId: string;
@@ -16,6 +16,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
     const [inputMessage, setInputMessage] = useState<string>("");
     const [prompts, setPrompts] = useState<Prompt[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [voice, setVoice] = useState<boolean>(false);
 
     const scrollableContentRef = useRef<HTMLDivElement | null>(null);
 
@@ -111,36 +112,18 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
                 </div>
             </div>
             <div className="p-4 w-4/5 flex justify-center">
-                <div className="flex items-center bg-[#B0CBC9] rounded-2xl px-4 py-2 w-full">
-                    <input
-                        type="text"
-                        placeholder="What's in your mind..."
-                        className={`flex-1 bg-transparent outline-none text-black placeholder:text-black placeholder:text-sm placeholder:italic ${pjs.className}`}
-                        value={inputMessage}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setInputMessage(e.target.value)
-                        }
-                        onKeyPress={(
-                            e: React.KeyboardEvent<HTMLInputElement>
-                        ) =>
-                            !loading && e.key === "Enter" && handleSendMessage()
-                        }
-                    />
-                    <div
-                        className={`w-8 h-8 mx-1 rounded-full flex items-center justify-center bg-[#F7F4F0] cursor-pointer`}
-                    >
-                        <Mic className="text-black w-4" />
-                    </div>
-                    <div
-                        className={`w-8 h-8 mx-1 rounded-full flex items-center justify-center ${
-                            loading
-                                ? "bg-gray-600 cursor-not-allowed"
-                                : "bg-[#F7F4F0] cursor-pointer"
-                        }`}
-                        onClick={() => !loading && handleSendMessage()}
-                    >
-                        <Send className="text-black w-4" />
-                    </div>
+                <div className="flex items-center bg-[#B0CBC9] dark:bg-black rounded-2xl px-4 py-2 w-full">
+                    {voice ? (
+                        <VoiceInput setVoice={setVoice}/>
+                    ) : (
+                        <TextInput
+                            loading={loading}
+                            handleSendMessage={handleSendMessage}
+                            setInputMessage={setInputMessage}
+                            setVoice={setVoice}
+                            inputMessage={inputMessage}
+                        />
+                    )}
                 </div>
             </div>
         </div>
