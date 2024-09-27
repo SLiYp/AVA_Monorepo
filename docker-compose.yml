@@ -16,7 +16,7 @@ services:
     build: ./flask
     container_name: ava-llm-server
     ports:
-      - "6100:6100"
+      - "3100:3100"
     volumes:
       - ~/Desktop/AVA_Monorepo/configs/flask.env:/app/.env
     environment:
