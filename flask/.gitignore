@@ -165,5 +165,6 @@ cython_debug/
 message_history/*.json
 !message_history/
 
+custom_data/*
 custom_data/
 chromadb/

@@ -1,16 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import {
-    MessageCircle,
-    Brain,
-    Users,
-    Moon,
-    Activity,
-    HelpCircle,
-    ShoppingBag,
-    EllipsisVertical,
-    Settings,
-} from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import Agent from "./Agent";
 import Dropdown from "./Dropdown";
 import AddModal from "./AddModal";
@@ -24,6 +14,11 @@ import {
 } from "@/lib/chatFunctions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import DropdownSignOut from "./DropdownSignOut";
+import { useUser } from "@/lib/context/userContext";
+import MiniAgent from "./MiniAgent";
+import SidebarIcon from "../icons/SidebarIcon";
+import { pjs, urbanist } from "@/app/fonts";
 
 interface Agent {
     chatSessionId: string;
@@ -35,21 +30,27 @@ interface Agent {
 const Sidebar = () => {
     const [chats, setChats] = useState<string[]>([]);
     const [agents, setAgents] = useState<Agent[]>([]);
-    const [user, setUser] = useState<string>("");
     const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [signOutVisible, setSignOutVisible] = useState(false);
+    const [min, setMin] = useState<Boolean>(false);
     const [modalOpen, setModalOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const signOutRef = useRef<HTMLDivElement>(null);
     const { session, setSession } = useSessionContext();
     const router = useRouter();
+    const { user, logout } = useUser();
 
     useEffect(() => {
         async function fetchData() {
             try {
                 const data = await getCurrentUser();
                 const chatSessions = data.chatSessions.reverse();
-                setChats([...chatSessions.map((session:any) => {return session.sessionId})]);
-                setUser(data._id);
-                const agentsData = chatSessions.map((chat:any) => ({
+                setChats([
+                    ...chatSessions.map((session: any) => {
+                        return session.sessionId;
+                    }),
+                ]);
+                const agentsData = chatSessions.map((chat: any) => ({
                     chatSessionId: chat.sessionId,
                     name: chat.name,
                     image: chat.image,
@@ -81,9 +82,31 @@ const Sidebar = () => {
         };
     }, [dropdownRef]);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                signOutRef.current &&
+                !signOutRef.current.contains(event.target as Node)
+            ) {
+                setSignOutVisible(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [signOutRef]);
+
     const handleAddNewAgent = () => {
         setModalOpen(true);
         setDropdownVisible(false);
+    };
+
+    const signOut = () => {
+        logout();
+        router.push("/");
     };
 
     const handleAddAgent = async (
@@ -92,7 +115,7 @@ const Sidebar = () => {
         category: string
     ) => {
         try {
-            const chatSessionId = await createSession({name,image});
+            const chatSessionId = await createSession({ name, image });
             console.log(chatSessionId);
             if (chatSessionId) {
                 const newAgent = {
@@ -112,59 +135,72 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="relative w-64 bg-black p-4 flex flex-col justify-between rounded-r-xl">
+        <div
+            className={`relative ${
+                min ? "w-24" : "w-1/5 min-w-48"
+            } bg-[#B0CBC9] px-4 py-8 flex flex-col justify-between rounded-r-xl ${
+                pjs.className
+            }`}
+        >
             <div>
-                <div className="mb-2">
-                    <div className="flex flex-row justify-between mb-4 items-center">
-                        <Image
-                            src="/ava-darkBG-logo.png"
-                            width={30}
-                            height={30}
-                            alt="Ava Logo"
+                <div
+                    className={`flex ${
+                        min ? "flex-col gap-4 pb-4" : "flex-row"
+                    } justify-between items-center`}
+                >
+                    <div
+                        className="cursor-pointer"
+                        onClick={() => setMin(!min)}
+                    >
+                        <SidebarIcon />
+                    </div>
+                    <div
+                        className={`relative ${min ? "hidden" : null}`}
+                        ref={dropdownRef}
+                    >
+                        <EllipsisVertical
+                            color="#6A6969"
+                            onClick={() => setDropdownVisible(!dropdownVisible)}
+                            className="cursor-pointer"
                         />
-                        <div className="w-[30px] h-[30px] rounded-full flex items-center justify-center bg-[#212121] cursor-pointer">
-                            <Settings width={15} height={15} />
-                        </div>
+                        {dropdownVisible && (
+                            <Dropdown
+                                onAddNewAgent={handleAddNewAgent}
+                                closeDropdown={() => setDropdownVisible(false)}
+                            />
+                        )}
                     </div>
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        className="w-full bg-[#191919] rounded-full p-2"
-                    />
                 </div>
-                <div className="relative">
-                    <div className="flex flex-row justify-between items-center py-4 -mx-4 px-4 border-y border-solid border-[#161616]">
-                        <h2 className="text-sm font-semibold text-[#6A6969]">
-                            Chats
-                        </h2>
-                        <div className="relative" ref={dropdownRef}>
-                            <EllipsisVertical
-                                color="#6A6969"
-                                onClick={() =>
-                                    setDropdownVisible(!dropdownVisible)
-                                }
-                                className="cursor-pointer"
-                            />
-                            {dropdownVisible && (
-                                <Dropdown
-                                    onAddNewAgent={handleAddNewAgent}
-                                    closeDropdown={() =>
-                                        setDropdownVisible(false)
-                                    }
+                <h2
+                    className={`text-lg font-semibold text-black mt-8 mb-2 ${
+                        min ? "hidden" : null
+                    }`}
+                >
+                    Your Conversations
+                </h2>
+                <div className={`space-y-1 overflow-y-auto custom-scrollbar`}>
+                    {chats.length === 0 ? (
+                        <AddModal
+                            isOpen={true}
+                            initial={true}
+                            onClose={() => setModalOpen(false)}
+                            onAddAgent={handleAddAgent}
+                        />
+                    ) : (
+                        agents.map((a) =>
+                            min ? (
+                                <MiniAgent
+                                    key={a.chatSessionId}
+                                    chat_id={a.chatSessionId}
+                                    image={a.image}
+                                    onClick={() => {
+                                        setSession(a.chatSessionId);
+                                        router.replace(
+                                            `/chat/${a.chatSessionId}`
+                                        );
+                                    }}
                                 />
-                            )}
-                        </div>
-                    </div>
-                    <div className="space-y-1 max-h-72 overflow-y-auto -mx-4 px-4 custom-scrollbar">
-                        {chats.length === 0 ? (
-                            <AddModal
-                                isOpen={true}
-                                initial={true}
-                                onClose={() => setModalOpen(false)}
-                                onAddAgent={handleAddAgent}
-                            />
-                        ) : (
-                            agents.map((a) => (
+                            ) : (
                                 <Agent
                                     key={a.chatSessionId}
                                     chat_id={a.chatSessionId}
@@ -173,54 +209,35 @@ const Sidebar = () => {
                                     category={a.category}
                                     onClick={() => {
                                         setSession(a.chatSessionId);
-                                        router.replace(`/chat/${a.chatSessionId}`);
+                                        router.replace(
+                                            `/chat/${a.chatSessionId}`
+                                        );
                                     }}
                                 />
-                            ))
-                        )}
-                    </div>
+                            )
+                        )
+                    )}
                 </div>
             </div>
-            <div>
-                <div className="flex flex-row justify-between items-center mb-3 py-4 -mx-4 px-4 border-y border-solid border-[#161616]">
-                    <p className="text-[#6A6969] text-sm font-semibold">
-                        Other Apps
-                    </p>
-                    <EllipsisVertical
-                        color="#6A6969"
-                        className="cursor-pointer"
-                    />
-                </div>
-
-                <div className="grid grid-cols-3 gap-4">
-                    <Link href="/future" className="flex flex-col items-center">
-                        <Brain className="mb-1" />
-                        <span className="text-xs">Mindfulness</span>
-                    </Link>
-                    <Link href="/future" className="flex flex-col items-center">
-                        <Users className="mb-1" />
-                        <span className="text-xs">Community</span>
-                    </Link>
-                    <Link href="/future" className="flex flex-col items-center">
-                        <MessageCircle className="mb-1" />
-                        <span className="text-xs">Therapy</span>
-                    </Link>
-                    <Link href="/future" className="flex flex-col items-center">
-                        <Moon className="mb-1" />
-                        <span className="text-xs">Bedtime</span>
-                    </Link>
-                    <Link href="/future" className="flex flex-col items-center">
-                        <Activity className="mb-1" />
-                        <span className="text-xs">My Health</span>
-                    </Link>
-                    <Link href="/future" className="flex flex-col items-center">
-                        <HelpCircle className="mb-1" />
-                        <span className="text-xs">Support</span>
-                    </Link>
-                    <Link href="/future" className="flex flex-col items-center">
-                        <ShoppingBag className="mb-1" />
-                        <span className="text-xs">Marketplace</span>
-                    </Link>
+            <div className="flex items-center justify-center">
+                <div
+                    className={`border-white border-2 rounded-full ${
+                        min
+                            ? null
+                            : "space-x-2 w-full flex flex-row items-center"
+                    } p-2 cursor-pointer`}
+                    onClick={signOut}
+                >
+                    <div className="w-[30px] h-[30px] rounded-full bg-white overflow-hidden">
+                        <img src={user?.image} alt="Profile Pic" />
+                    </div>
+                    <span
+                        className={`text-black ${min ? "hidden" : null} ${
+                            urbanist.className
+                        }`}
+                    >
+                        <i>{user?.name}</i>
+                    </span>
                 </div>
             </div>
             <AddModal

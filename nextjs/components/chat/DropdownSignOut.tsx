@@ -1,29 +1,29 @@
 import React from "react";
 
-interface DropdownProps {
-    onAddNewAgent: () => void;
-    closeDropdown: () => void;
+interface DropdownSignOutProps {
+    onSignOut: () => void;
+    closeDropdownSignOut: () => void;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({
-    onAddNewAgent,
-    closeDropdown,
+const DropdownSignOut: React.FC<DropdownSignOutProps> = ({
+    onSignOut,
+    closeDropdownSignOut,
 }) => {
     return (
         <div className="absolute bg-gray-700 shadow-lg rounded-lg p-2 right-0 mt-2">
             <ul className="list-none m-0 p-0">
                 <li
                     onClick={() => {
-                        onAddNewAgent();
-                        closeDropdown();
+                        onSignOut();
+                        closeDropdownSignOut();
                     }}
                     className="cursor-pointer p-2 whitespace-nowrap"
                 >
-                    Add New Agent
+                    Sign Out
                 </li>
             </ul>
         </div>
     );
 };
 
-export default Dropdown;
+export default DropdownSignOut;
