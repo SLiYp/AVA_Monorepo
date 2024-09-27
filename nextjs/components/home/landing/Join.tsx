@@ -29,7 +29,7 @@ export const Join = () => {
             Join Our Beta Program in building the next big revolution in
             emotional intelligence.{" "}
           </h1>
-          <span className="flex w-9/12  justify-between border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-500 py-2 ">
+          <span className="flex w-9/12 justify-between border border-b-2 border-l-0 border-r-0 border-t-0 border-gray-500 py-2">
             <input
               type="text"
               name=""
