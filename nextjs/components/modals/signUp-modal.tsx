@@ -81,7 +81,7 @@ export default function SignUpModal() {
                 name: values.name,
                 email: values.email,
                 password: values.password,
-                imageUrl: imageUrl,
+                image: imageUrl,
             };
             await signUp(val);
             login();

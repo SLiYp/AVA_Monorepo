@@ -42,7 +42,7 @@ const Sidebar = () => {
     const { user, logout } = useUser();
 
     useEffect(() => {
-        async function fetchData() {
+        async function fetchData() { 
             try {
                 const data = await getCurrentUser();
                 const chatSessions = data.chatSessions.reverse();
