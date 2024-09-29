@@ -164,7 +164,3 @@ cython_debug/
 #message history
 message_history/*.json
 !message_history/
-
-custom_data/*
-custom_data/
-chromadb/
