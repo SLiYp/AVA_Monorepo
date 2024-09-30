@@ -1,0 +1,38 @@
+name: Ava web app CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - Release  # Change to your main branch name
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to ACR
+      uses: docker/login-action@v2
+      with:
+        registry: registry54.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}  # Add ACR username as a secret
+        password: ${{ secrets.ACR_PASSWORD }}  # Add ACR password as a secret
+
+    - name: Build and Push Docker Images
+      run: |
+        docker build -t registry54.azurecr.io/ava-backend-server:latest ./nodejs
+        docker push registry54.azurecr.io/ava-backend-server:latest
+
+        docker build -t registry54.azurecr.io/ava-llm-server:latest ./flask
+        docker push registry54.azurecr.io/ava-llm-server:latest
+
+        docker build -t registry54.azurecr.io/ava-webapp-frontend:latest ./nextjs
+        docker push registry54.azurecr.io/ava-webapp-frontend:latest
+
+    # - name: Deploy to Azure App Service
+    #   run: |
+    #     az webapp restart --name <your-nodejs-app-name> --resource-group <your-resource-group>
+    #     az webapp restart --name <your-flask-app-name> --resource-group <your-resource-group>
+    #     az webapp restart --name <your-nextjs-app-name> --resource-group <your-resource-group>
