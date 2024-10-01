@@ -21,12 +21,12 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}  # Add ACR password as a secret
 
     - name: Build and Push Docker Images
+      # run: |
+      #   docker build -t registry54.azurecr.io/ava-backend-server:latest ./nodejs
+      #   docker push registry54.azurecr.io/ava-backend-server:latest
+
+      #   docker build -t registry54.azurecr.io/ava-llm-server:latest ./flask
+      #   docker push registry54.azurecr.io/ava-llm-server:latest
       run: |
-        docker build -t registry54.azurecr.io/ava-backend-server:latest ./nodejs
-        docker push registry54.azurecr.io/ava-backend-server:latest
-
-        docker build -t registry54.azurecr.io/ava-llm-server:latest ./flask
-        docker push registry54.azurecr.io/ava-llm-server:latest
-
         docker build  --build-arg NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }} -t registry54.azurecr.io/ava-webapp-frontend:latest ./nextjs
         docker push registry54.azurecr.io/ava-webapp-frontend:latest
