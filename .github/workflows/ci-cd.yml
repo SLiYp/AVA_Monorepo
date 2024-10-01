@@ -31,8 +31,8 @@ jobs:
         docker build -t registry54.azurecr.io/ava-webapp-frontend:latest ./nextjs
         docker push registry54.azurecr.io/ava-webapp-frontend:latest
 
-    # - name: Deploy to Azure App Service
-    #   run: |
-    #     az webapp restart --name <your-nodejs-app-name> --resource-group <your-resource-group>
-    #     az webapp restart --name <your-flask-app-name> --resource-group <your-resource-group>
+    - name: Deploy to Azure App Service
+      run: |
+        az webapp restart --name ava-frontend --resource-group Avaai_group
+        az webapp restart --name ava-backend --resource-group Avaai_group
     #     az webapp restart --name <your-nextjs-app-name> --resource-group <your-resource-group>

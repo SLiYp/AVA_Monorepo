@@ -15,7 +15,7 @@ connectDB();
 
 //cors middleware
 const corsOptions = {
-    origin: '*', // Allow all origins. For production, specify your domain.
+    origin: process.env.CORS_DOMAIN, // Pass single domain
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, x-auth-token'
 };
@@ -29,4 +29,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes);
 const PORT = process.env.PORT;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`)
+    console.log('environment: ' + process.env)
+});
