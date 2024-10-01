@@ -2,12 +2,12 @@
 
 const axios = require("axios");
 import { getAccessToken } from "@/utils/storage";
-
-const BACKEND_URI =
-    process.env.NEXT_PUBLIC_SERVER_URL;
+import { unstable_noStore as noStore } from 'next/cache'
 
 
 export const api: any = (token?: string) => {
+    noStore()
+    const BACKEND_URI =process.env.SERVER_URL;
     let token_data = token ? token : getAccessToken();
     if (typeof token_data === "string" && token_data.split(".").length === 3)
         return axios.create({
