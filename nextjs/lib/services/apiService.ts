@@ -4,7 +4,7 @@ const axios = require("axios");
 import { getAccessToken } from "@/utils/storage";
 
 const BACKEND_URI =
-    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
+    process.env.NEXT_PUBLIC_SERVER_URL;
 
 
 export const api: any = (token?: string) => {
