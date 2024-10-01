@@ -38,7 +38,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      -./configs/nextjs.env:/app/.env
+      - ./configs/nextjs.env:/app/.env
     environment:
       - NEXT_ENV_FILE=/app/.env
       - DOCKER_HTTP_TIMEOUT=100000
