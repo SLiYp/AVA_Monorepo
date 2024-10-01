@@ -1,11 +1,12 @@
 services:
   nodejs:
     build: ./nodejs
+    image: registry54.azurecr.io/ava-backend-server:latest
     container_name: ava-backend-server
     ports:
       - "5000:5000"
     volumes:
-      - ~/Desktop/AVA_Monorepo/configs/nodejs.env:/app/.env
+      - ./configs/nodejs.env:/app/.env
     environment:
       - NODE_ENV_FILE=/app/.env
       - DOCKER_HTTP_TIMEOUT=100000
@@ -14,11 +15,12 @@ services:
 
   flask:
     build: ./flask
+    image: registry54.azurecr.io/ava-llm-server:latest
     container_name: ava-llm-server
     ports:
       - "3100:3100"
     volumes:
-      - ~/Desktop/AVA_Monorepo/configs/flask.env:/app/.env
+      - ./configs/flask.env:/app/.env
     environment:
       - FLASK_ENV_FILE=/app/.env
       - DOCKER_HTTP_TIMEOUT=100000
@@ -31,11 +33,12 @@ services:
 
   nextjs:
     build: ./nextjs
+    image: registry54.azurecr.io/ava-frontend-client:latest
     container_name: ava-webapp-frontend
     ports:
       - "3000:3000"
     volumes:
-      - ~/Desktop/AVA_Monorepo/configs/nextjs.env:/app/.env
+      -./configs/nextjs.env:/app/.env
     environment:
       - NEXT_ENV_FILE=/app/.env
       - DOCKER_HTTP_TIMEOUT=100000

@@ -15,6 +15,7 @@ import { useEffect } from "react";
 export default function Home() {
     const router = useRouter();
     useEffect(() => {
+        console.log(process.env)
       if(localStorage.getItem("access_token")) router.push("/chat")
     },[])
     return (
