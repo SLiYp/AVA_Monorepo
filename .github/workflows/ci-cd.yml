@@ -31,8 +31,22 @@ jobs:
         docker build -t registry54.azurecr.io/ava-webapp-frontend:latest ./nextjs
         docker push registry54.azurecr.io/ava-webapp-frontend:latest
 
-    - name: Deploy to Azure App Service
+    # Authenticate with Azure using Managed Identity
+    - name: Azure Login with Managed Identity
+      run: |
+        az login --identity --username ${{ secrets.AZURE_MANAGED_IDENTITY_CLIENT_ID }}
+
+    # Restart Frontend Web App (ava-frontend)
+    - name: Restart Frontend App
       run: |
         az webapp restart --name ava-frontend --resource-group Avaai_group
+
+    # Restart Backend Web App (ava-backend)
+    - name: Restart Backend App
+      run: |
         az webapp restart --name ava-backend --resource-group Avaai_group
-    #     az webapp restart --name <your-nextjs-app-name> --resource-group <your-resource-group>
+
+    # Restart LLM Server Web App (ava-llm-server)
+    - name: Restart LLM Server App
+      run: |
+        az webapp restart --name ava-llm --resource-group Avaai_group
