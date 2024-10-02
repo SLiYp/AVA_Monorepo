@@ -30,13 +30,11 @@ export const handleResponse = (res:any) => {
         }
         return data;
     } catch (error) {
-        console.log("backend connection url: ",BACKEND_URI )
         console.log("handle response: ", error);
     }
 };
 
 export const handleError = (err: any) => {
-    console.log("backend connection url: ",BACKEND_URI )
     console.log("handle error: ", err);
     return null;
 };
