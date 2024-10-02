@@ -15,7 +15,7 @@ connectDB();
 
 //cors middleware
 const corsOptions = {
-    origin: process.env.CORS_DOMAIN, // Pass single domain
+    origin: [process.env.CORS_DOMAIN], // Pass single domain
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, x-auth-token'
 };
