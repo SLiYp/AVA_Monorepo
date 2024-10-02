@@ -10,7 +10,7 @@ from rag import process_llm_prompt, get_session_history  # Importing functions f
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": [" https://ava-backend.redplant-20e5427d.australiaeast.azurecontainerapps.io"]}})
+CORS(app, resources={r"/*": {"origins": os.getenv('CORS_DOMAIN')}})
 
 
 # Set the OpenAI API key
