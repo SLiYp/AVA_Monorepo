@@ -11,7 +11,7 @@ export default function ChatLayout({
 }) {
     const [session, setSession] = useState<string | null>(null);
     return (
-        <div className="flex h-screen bg-[#F7F4F0] dark:bg-[#242227] text-white">
+        <div className="flex bg-[#F7F4F0] dark:bg-[#242227] text-white">
             <sessionContext.Provider value={{ session, setSession }}>
                 <Sidebar />
                 {children}

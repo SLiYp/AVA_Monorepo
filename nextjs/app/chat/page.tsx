@@ -4,11 +4,9 @@ import { pjs } from "../fonts";
 export default function ChatPage() {
     const { user } = useUser();
     return (
-        <div className="w-4/5 h-screen relative">
-            <div className="h-[10%] text-black">Ok</div>
-            <div
-                className={`w-[90%] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${pjs.className}`}
-            >
+        <div className="flex flex-col flex-1 items-center">
+            <div className="h-[10%] text-black"></div>
+            <div className={`w-[90%] h-full flex flex-col justify-center ${pjs.className}`}>
                 <h1 className="text-4xl font-semibold text-black dark:text-white">
                     Hey ! {user?.name}
                 </h1>

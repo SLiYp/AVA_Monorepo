@@ -10,11 +10,17 @@ import {
     useEffect,
 } from "react";
 
+interface ChatSessions {
+    sessionId: string;
+    name: string;
+    image: string;
+}
+
 interface User {
     name: string;
     email: string;
     image: string;
-    chatsessions: string[];
+    chatSessions: ChatSessions[];
 }
 
 interface UserContextType {

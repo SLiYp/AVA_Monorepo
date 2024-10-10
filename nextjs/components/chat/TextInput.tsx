@@ -32,13 +32,13 @@ const TextInput = ({
                 }
             />
             <div
-                className={`w-8 h-8 mx-1 rounded-full flex items-center justify-center bg-[#F7F4F0] cursor-pointer`}
+                className={`w-8 h-8 mx-1 rounded-full flex flex-shrink-0 items-center justify-center bg-[#F7F4F0] cursor-pointer`}
                 onClick={() => setVoice(true)}
             >
                 <Mic className="text-black w-4" />
             </div>
             <div
-                className={`w-8 h-8 mx-1 rounded-full flex items-center justify-center ${
+                className={`w-8 h-8 mx-1 rounded-full flex flex-shrink-0 items-center justify-center ${
                     loading
                         ? "bg-gray-600 cursor-not-allowed"
                         : "bg-[#F7F4F0] cursor-pointer"

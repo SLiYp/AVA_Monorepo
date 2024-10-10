@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import PulsatingDots from "./PulsatingDots";
 import { useUser } from "@/lib/context/userContext";
 import { useSessionContext } from "@/lib/context/AgentContext";
 import { getSession } from "@/lib/services/chatService";
 import UserMessageTail from "../icons/UserMessageTail";
 import AgentMessageTail from "../icons/AgentMessageTail";
+import ReactMarkdown from "react-markdown";
 
 interface BubbleProps {
     text: string;
@@ -45,9 +47,14 @@ const Bubble: React.FC<BubbleProps> = ({ text, isUser, isloading }) => {
                     } ${isUser ? "ml-2" : "mr-2"}`}
                 >
                     {isUser ? (
-                        <img src={user?.image} alt="Profile Pic" />
+                        <Image
+                        src={user ? user.image : "/profile.png"}
+                        alt="Profile Pic"
+                        width={32}
+                        height={32}
+                    />
                     ) : (
-                        <img src={image} alt="Profile Pic" />
+                        <Image width={32} height={32} src={image} alt='Profile Pic' />
                     )}
                 </div>
 
@@ -61,7 +68,7 @@ const Bubble: React.FC<BubbleProps> = ({ text, isUser, isloading }) => {
                                 : "bg-[#2B292E] ml-1"
                         }`}
                     >
-                        <p className="text-sm px-1">{text}</p>
+                        <ReactMarkdown className="text-sm px-1">{text}</ReactMarkdown>
                         <div
                             className={`absolute top-0 ${
                                 isUser ? "right-[-8px]" : "left-[-8px]"
