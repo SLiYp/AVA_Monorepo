@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, Suspense } from "react";
 import Image from "next/image";
 import { EllipsisVertical } from "lucide-react";
 import Agent from "./Agent";
 import Dropdown from "./Dropdown";
-import AddModal from "./AddModal";
 import { useSessionContext } from "@/lib/context/AgentContext";
 import { getCurrentUser } from "@/lib/services/authService";
 import { createSession } from "@/lib/services/chatService";
@@ -12,14 +11,14 @@ import {
     getRandomHexColor,
     getRandomName,
 } from "@/lib/chatFunctions";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import DropdownSignOut from "./DropdownSignOut";
 import { useUser } from "@/lib/context/userContext";
 import MiniAgent from "./MiniAgent";
 import SidebarIcon from "../icons/SidebarIcon";
 import { pjs, urbanist } from "@/app/fonts";
 import ThemeSwitcher from "./ThemeSwitcher";
+
+const AddModal = React.lazy(() => import("./AddModal"));
 
 interface Agent {
     chatSessionId: string;
@@ -32,17 +31,15 @@ const Sidebar = () => {
     const [chats, setChats] = useState<string[]>([]);
     const [agents, setAgents] = useState<Agent[]>([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [signOutVisible, setSignOutVisible] = useState(false);
     const [min, setMin] = useState<boolean>(false);
     const [modalOpen, setModalOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const signOutRef = useRef<HTMLDivElement>(null);
     const { session, setSession } = useSessionContext();
     const router = useRouter();
     const { user, logout } = useUser();
 
     useEffect(() => {
-        async function fetchData() { 
+        async function fetchData() {
             try {
                 const data = await getCurrentUser();
                 const chatSessions = data.chatSessions.reverse();
@@ -83,23 +80,6 @@ const Sidebar = () => {
         };
     }, [dropdownRef]);
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                signOutRef.current &&
-                !signOutRef.current.contains(event.target as Node)
-            ) {
-                setSignOutVisible(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [signOutRef]);
-
     const handleAddNewAgent = () => {
         setModalOpen(true);
         setDropdownVisible(false);
@@ -116,7 +96,7 @@ const Sidebar = () => {
         category: string
     ) => {
         try {
-            const chatSessionId = await createSession({ name, image });
+            const chatSessionId = await createSession({ name, image, category });
             console.log(chatSessionId);
             if (chatSessionId) {
                 const newAgent = {
@@ -137,13 +117,14 @@ const Sidebar = () => {
 
     return (
         <div
-            className={`relative ${
+            className={`h-dvh relative ${
                 min ? "w-24" : "w-1/5 min-w-[13rem]"
             } bg-[#B0CBC9] dark:bg-black px-4 py-8 flex flex-col justify-between rounded-r-xl ${
                 pjs.className
-            } transition-all duration-300 ease-in-out text-black dark:text-white`}
+            } text-black dark:text-white`}
+            // transition-all duration-300 ease-in-out
         >
-            <div>
+            <div className="mb-2">
                 <div
                     className={`flex ${
                         min ? "flex-col gap-4 pb-4" : "flex-row"
@@ -179,14 +160,18 @@ const Sidebar = () => {
                 >
                     Your Conversations
                 </h2>
-                <div className={`space-y-1 overflow-y-auto custom-scrollbar`}>
+                <div
+                    className={`space-y-1 overflow-y-auto custom-scrollbar max-h-[28rem]`}
+                >
                     {chats.length === 0 ? (
-                        <AddModal
-                            isOpen={true}
-                            initial={true}
-                            onClose={() => setModalOpen(false)}
-                            onAddAgent={handleAddAgent}
-                        />
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <AddModal
+                                isOpen={true}
+                                initial={true}
+                                onClose={() => setModalOpen(false)}
+                                onAddAgent={handleAddAgent}
+                            />
+                        </Suspense>
                     ) : (
                         agents.map((a) =>
                             min ? (
@@ -231,7 +216,12 @@ const Sidebar = () => {
                     onClick={signOut}
                 >
                     <div className="w-[30px] h-[30px] rounded-full bg-white overflow-hidden">
-                        <img src={user?.image} alt="Profile Pic" />
+                        <Image
+                            src={user ? user.image : "/profile.png"}
+                            alt="Profile Pic"
+                            width={30}
+                            height={30}
+                        />
                     </div>
                     <span
                         className={`${min ? "hidden" : null} ${
@@ -242,12 +232,14 @@ const Sidebar = () => {
                     </span>
                 </div>
             </div>
-            <AddModal
-                isOpen={modalOpen}
-                initial={false}
-                onClose={() => setModalOpen(false)}
-                onAddAgent={handleAddAgent}
-            />
+            {modalOpen && (
+                <AddModal
+                    isOpen={modalOpen}
+                    initial={false}
+                    onClose={() => setModalOpen(false)}
+                    onAddAgent={handleAddAgent}
+                />
+            )}
         </div>
     );
 };

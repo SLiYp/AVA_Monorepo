@@ -70,7 +70,9 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
                               ...prompt,
                               responses: [
                                   ...prompt.responses.slice(0, -1),
-                                  res ? res : "Server Error",
+                                  res
+                                      ? res
+                                      : "Server Error",
                               ],
                           }
                         : prompt
@@ -86,7 +88,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
 
     return (
         <div className="flex flex-col items-center justify-center flex-1">
-            <div className="h-[10%] text-black">Ok</div>
+            <div className="h-[10%] text-black"></div>
             <div
                 className="flex-1 flex p-4 overflow-y-auto justify-center custom-scrollbar w-full"
                 ref={scrollableContentRef}
@@ -114,7 +116,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ sessionId }) => {
             <div className="p-4 w-4/5 flex justify-center">
                 <div className="flex items-center bg-[#B0CBC9] dark:bg-black rounded-2xl px-4 py-2 w-full">
                     {voice ? (
-                        <VoiceInput setVoice={setVoice}/>
+                        <VoiceInput setVoice={setVoice} />
                     ) : (
                         <TextInput
                             loading={loading}

@@ -39,17 +39,17 @@ const VoiceInput = ({ setVoice }: VoiceInputProps) => {
 
     return (
         <>
-            <Mic className="text-black dark:text-white w-4 mx-1" />
+            <Mic className="text-black dark:text-white w-4 mx-1 flex-shrink-0" />
             <p className="flex-1 text-black dark:text-white text-sm mx-1">{formatTime(time)}</p>
             <p className="text-black dark:text-white text-sm">Listening...</p>
             <div
-                className={`w-8 h-8 mx-1 rounded-full flex items-center justify-center bg-[#F7F4F0] cursor-pointer`}
+                className={`w-8 h-8 mx-1 rounded-full flex flex-shrink-0 items-center justify-center bg-[#F7F4F0] cursor-pointer`}
                 onClick={handleStop}
             >
                 <X className="text-black w-4" />
             </div>
             <div
-                className={`w-8 h-8 mx-1 rounded-full flex items-center justify-center bg-[#F7F4F0] cursor-pointer`}
+                className={`w-8 h-8 mx-1 rounded-full flex flex-shrink-0 items-center justify-center bg-[#F7F4F0] cursor-pointer`}
             >
                 <Send className="text-black w-4" />
             </div>
