@@ -14,6 +14,12 @@ const ChatSessionSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
+    preferences:{
+        about:{
+            type : String,
+            required: true,
+        }
+    },
     prompts: [{
         promptId: {
             type: String,

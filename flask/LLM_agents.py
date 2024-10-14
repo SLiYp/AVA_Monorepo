@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel
@@ -18,7 +19,9 @@ def _set_if_undefined(var: str):
         os.environ[var] = getpass.getpass(f"Provide your API_KEY {var}")    
 
 
-
+# Load environment variables
+load_dotenv()
+os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
 _set_if_undefined("OPEN_API_KEY") # LLM
 
 _set_if_undefined("TAVILY_API_KEY") # Webscraping

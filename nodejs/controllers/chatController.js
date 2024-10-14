@@ -5,13 +5,14 @@ const { encrypt, decrypt } = require("../utils/crypto-utils");
 
 exports.createChatSession = async (req, res) => {
     const userId = req.user.id;
-    const { name, image } = req.body;
+    const { name, image,preferences } = req.body;
 
     try {
         const newChatSession = new ChatSession({
             name: encrypt(name),
             user: userId,
             image: encrypt(image),
+            preferences: preferences,
         });
         const chatSession = await newChatSession.save();
 
